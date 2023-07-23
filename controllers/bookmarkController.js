@@ -5,6 +5,7 @@ const {
     getBookmark,
     createBookmark,
     deleteBookmark,
+    updateBookmark,
   } = require("../queries/bookmarks");
 
 const { checkName, checkBoolean } = require("../validations/checkBookmarks.js");
@@ -49,6 +50,15 @@ bookmarks.delete("/:id", async (req, res) => {
     } else {
       res.status(404).json("Bookmark not found");
     }
+  });
+
+
+//UPDATE
+// UPDATE
+bookmarks.put("/:id", async (req, res) => {
+    const { id } = req.params;
+    const updatedBookmark = await updateBookmark(id, req.body);
+    res.status(200).json(updatedBookmark);
   });
 
 module.exports = bookmarks;

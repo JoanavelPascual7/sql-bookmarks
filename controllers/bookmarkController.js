@@ -1,6 +1,12 @@
 const express = require("express");
 const bookmarks = express.Router();
-const { getAllBookmarks, getBookmark, createBookmark } = require("../queries/bookmarks");
+const {
+    getAllBookmarks,
+    getBookmark,
+    createBookmark,
+    deleteBookmark,
+  } = require("../queries/bookmarks");
+
 const { checkName, checkBoolean } = require("../validations/checkBookmarks.js");
 
 // INDEX
@@ -33,5 +39,16 @@ bookmarks.post("/", checkBoolean, checkName, async (req, res) => {
     res.status(400).json({ error: error });
   }
 });
+
+// DELETE
+bookmarks.delete("/:id", async (req, res) => {
+    const { id } = req.params;
+    const deletedBookmark = await deleteBookmark(id);
+    if (deletedBookmark.id) {
+      res.status(200).json(deletedBookmark);
+    } else {
+      res.status(404).json("Bookmark not found");
+    }
+  });
 
 module.exports = bookmarks;
